@@ -1,0 +1,1872 @@
+{
+  "name": "AI Lead enrichment and Automated Emailing",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 4
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -80,
+        -320
+      ],
+      "id": "30b56b3c-cd6a-4a38-8cf6-b24ea0bbeb13",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1LMsum2k-9Oz_y_OHYHN7UOQr272nLh8LMEOaAU87-k4",
+          "mode": "list",
+          "cachedResultName": "Lead Capture form  (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LMsum2k-9Oz_y_OHYHN7UOQr272nLh8LMEOaAU87-k4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2056438614,
+          "mode": "list",
+          "cachedResultName": "Form Responses 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LMsum2k-9Oz_y_OHYHN7UOQr272nLh8LMEOaAU87-k4/edit#gid=2056438614"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        140,
+        -320
+      ],
+      "id": "11cca2d4-4262-4580-8071-a008386cbcb6",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pqXLK2lF5BcxwFdl",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "3fda1628-7bf4-464c-8d4f-2aa2238018ef",
+              "leftValue": "={{ $json.Lead_ID }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        360,
+        -320
+      ],
+      "id": "05680017-9cb0-4cae-85bd-f1d29c3dcd3e",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  const timestamp = new Date().toISOString();\n  const uniqueId = `${Date.now()}-${Math.floor(Math.random() * 10000)}`;\n  item.json['Lead_ID'] = uniqueId;\n  item.json['Timestamp'] = timestamp;\n  return item;\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        580,
+        -320
+      ],
+      "id": "8366a732-3648-46e5-940a-1ebb22280388",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1LMsum2k-9Oz_y_OHYHN7UOQr272nLh8LMEOaAU87-k4",
+          "mode": "list",
+          "cachedResultName": "Lead Capture form  (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LMsum2k-9Oz_y_OHYHN7UOQr272nLh8LMEOaAU87-k4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2056438614,
+          "mode": "list",
+          "cachedResultName": "Form Responses 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LMsum2k-9Oz_y_OHYHN7UOQr272nLh8LMEOaAU87-k4/edit#gid=2056438614"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Lead_ID": "={{ $('Code').item.json.Lead_ID }}",
+            "row_number": "={{ $('If').item.json.row_number }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Job Title",
+              "displayName": "Job Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Industry",
+              "displayName": "Industry",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Company Size",
+              "displayName": "Company Size",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Preferred Contact time",
+              "displayName": "Preferred Contact time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "What kind of service are you looking for?",
+              "displayName": "What kind of service are you looking for?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Decision Maker (Are you the final authority to approve this service?)",
+              "displayName": "Decision Maker (Are you the final authority to approve this service?)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Notes.",
+              "displayName": "Notes.",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Lead_ID",
+              "displayName": "Lead_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        800,
+        -320
+      ],
+      "id": "1e90e280-b97d-4613-8385-3b2c4bdebc02",
+      "name": "Google Sheets Row Update",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pqXLK2lF5BcxwFdl",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1LMsum2k-9Oz_y_OHYHN7UOQr272nLh8LMEOaAU87-k4",
+          "mode": "list",
+          "cachedResultName": "Lead Capture form  (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LMsum2k-9Oz_y_OHYHN7UOQr272nLh8LMEOaAU87-k4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1047658233,
+          "mode": "list",
+          "cachedResultName": "Enriched Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LMsum2k-9Oz_y_OHYHN7UOQr272nLh8LMEOaAU87-k4/edit#gid=1047658233"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $('Code').item.json.Timestamp }}",
+            "Full Name": "={{ $('Code').item.json['Full Name'] }}",
+            "Email Address": "={{ $('Code').item.json['Email Address'] }}",
+            "Phone Number": "={{ $('Code').item.json['Phone Number'] }}",
+            "Company Name": "={{ $('Code').item.json['Company Name'] }}",
+            "Job Title": "={{ $('Code').item.json['Job Title'] }}",
+            "Industry": "={{ $('Code').item.json.Industry }}",
+            "Company Size": "={{ $('Code').item.json['Company Size'] }}",
+            "Preferred Contact time": "={{ $('Code').item.json['Preferred Contact time'] }}",
+            "What kind of service are you looking for?": "={{ $('Code').item.json['What kind of service are you looking for?'] }}",
+            "Decision Maker (Are you the final authority to approve this service?)": "={{ $('Code').item.json['Decision Maker (Are you the final authority to approve this service?)'] }}",
+            "Notes.": "={{ $('Code').item.json['Notes.'] }}",
+            "Lead_ID": "={{ $('Code').item.json.Lead_ID }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Job Title",
+              "displayName": "Job Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Industry",
+              "displayName": "Industry",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Company Size",
+              "displayName": "Company Size",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Preferred Contact time",
+              "displayName": "Preferred Contact time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "What kind of service are you looking for?",
+              "displayName": "What kind of service are you looking for?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Decision Maker (Are you the final authority to approve this service?)",
+              "displayName": "Decision Maker (Are you the final authority to approve this service?)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Notes.",
+              "displayName": "Notes.",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Lead_ID",
+              "displayName": "Lead_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1020,
+        -320
+      ],
+      "id": "b9c09ca1-3ec0-4412-ba8b-b0a38cdea49a",
+      "name": "Enriched Leads Sheet update1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pqXLK2lF5BcxwFdl",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Here's a lead's information\nName: {{ $('Enriched Leads Sheet update1').item.json['Full Name'] }}\nService type:{{ $('Enriched Leads Sheet update1').item.json['What kind of service are you looking for?'] }}\nDecision maker?: {{ $('Enriched Leads Sheet update1').item.json['Decision Maker (Are you the final authority to approve this service?)'] }}\nCompany Size: {{ $('Enriched Leads Sheet update1').item.json['Company Size'] }}\nExtra notes: {{ $('Enriched Leads Sheet update1').item.json['Notes.'] }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are an AI agent that qualifies and scores B2B leads for a boutique automation agency.\n\nYour job is to:\n1. Determine if the lead is qualified based on provided input.\n2. Score the lead from 0 to 100.\n3. Identify the likely industry of the lead's company, based on your understanding.\n4. Generate a one-line personalized outreach message.\n5. Provide a short reasoning for the lead score and decision.\n\nQUALIFICATION CRITERIA:\n1. The lead must be a decision maker (e.g., founder, CEO, director) or someone with purchasing influence.\n2. They should show interest in automating any of the following: lead generation, CRM, lead scoring, pipeline management, internal workflows, onboarding, outreach, content creation, client support, or sales training.\n3. The company should have no more than 40 employees.\n\nMake sure the Lead Score is given to the out put.\nUnderstand the lead scoring rules and be smart in giving scores.\nSCORING RULES:\n- 85–100: All 3 criteria met\n- 60–84: 2 criteria met\n- 30–59: 1 criterion met\n- Below 30: No criteria met\n\n❗️Return ONLY a JSON object. No explanation, no commentary.\n\nThe JSON format must be:\n```json\n{\n  \"qualified\": \"Yes/No\",\n  \"lead_score\": number,\n  \"industry\": \"string\",\n  \"insight\": \"string\"\n}\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        1240,
+        -320
+      ],
+      "id": "4f9ee1f3-bb15-4550-8be7-2703c224e801",
+      "name": "Lead Segregator and scorer"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4.1-nano",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        1264,
+        95
+      ],
+      "id": "76e4bd4d-59ba-4911-a381-735b205731fd",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "GPPfaSmkXsB1i3Xw",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
+      "typeVersion": 1,
+      "position": [
+        1324,
+        -100
+      ],
+      "id": "f53c099c-4311-406b-b605-49ef151d7836",
+      "name": "Auto-fixing Output Parser"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"qualified\": \"Yes\",\n    \"Lead Score\": \"91\",\n    \"Industry\": \"FinTech\",\n    \"Insight\": \"Co-founder clearly expresses need for pipeline automation; team appears to be under 30 employees.\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        1432,
+        95
+      ],
+      "id": "e13cf0ab-23b4-4e55-995e-15c21a861d83",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Name: {{ $('Enriched Leads Sheet update1').item.json['Full Name'] }}\nCompany: {{ $('Enriched Leads Sheet update1').item.json['Company Name'] }}\nTitle: {{ $('Enriched Leads Sheet update1').item.json['Job Title'] }}\nAI Insight: {{ $('Lead Segregator and scorer').item.json.output.Insight }}\nIndustry:{{ $('Lead Segregator and scorer').item.json.output.Industry }} & {{ $('Code').item.json.Industry }}\nInterest:{{ $('Enriched Leads Sheet update1').item.json['What kind of service are you looking for?'] }}\n",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "Overall Objective\nResearch B2B leads and generate highly personalized outreach hooks, along with reusable strategic metadata—even when key information like a company website is unavailable or ambiguous.\n\nContext\nYou are a top-tier AI lead researcher and B2B sales strategist, embedded in a revenue organization where precision and personalization drive performance. Your role is to identify what a company does, what challenges its decision-makers likely face, and how to frame outreach that feels tailor-made. When direct data is missing, your intuition, world knowledge, and reasoning are your greatest tools. Your insight powers millions in pipeline—act accordingly.\n\nTask\n\nFollow this step-by-step process to return strategic insights and personalized messaging:\n\nUnderstand the Lead\nParse the input to extract:\nPersona role (e.g., Head of Product, Founder)\nCompany name\nAny intent signal or business context\nSearch for the Domain (if missing or unclear)\nIf no domain is provided:\nUse SerpAPI to query:\n\"[Company Name] website\"\nExtract domain from the top result.\nIf the result is inconclusive or ambiguous, iterate:\nTry variations (e.g., company + industry, company + product keyword)\nUse multiple SerpAPI queries if needed to triangulate accurate results.\nFetch the Company’s /about Page\nOnce a domain is obtained:\nConstruct https://[domain]/about\nUse HTTP fetch to retrieve the page and extract rich context (mission, offering, tone, etc.)\nFallback: Intelligent Inference if Website is Missing or Inaccessible\nIf no reliable domain or /about page can be found:\nContinue using SerpAPI to gather:\nNews articles, business directories, LinkedIn profiles, Crunchbase entries, etc.\nUse all available data and your reasoning skills to infer:\nWhat the company likely does\nTheir target market and product category\nTheir business model or value proposition\nSynthesize and Write Output\nUse all gathered data and inferred insight to:\nCraft a 1-line personalized outreach hook\nIdentify likely pain points the persona faces\nHighlight opportunities for your solution to add value\nSummarize what the company does in 2–3 clear sentences\nPrepare for Automation\nStructure all output in a reusable JSON format for downstream enrichment and outbound sequencing.\nConstraints\n\nOutput only valid JSON in the format below—no markdown, comments, or extra text\nMultiple SerpAPI calls are allowed—use them strategically to increase confidence\nHook must sound personalized, not robotic or templated\nIf no official website is found, leverage reasoning + secondary sources to still produce a meaningful company summary and outreach\nUse a professional but conversational tone\nEach pain point and opportunity should be credible and role-specific\n\n{\n  \"hook\": \"1-line personalized outreach sentence\",\n  \"why_it_works\": \"short explanation of why this hook is relevant\",\n  \"company_summary\": \"2–3 sentence summary of what the company does\",\n  \"persona_type\": \"e.g., founder, growth marketer, head of operations\",\n  \"pain_points\": [\"string\", \"string\"],\n  \"opportunities\": [\"string\", \"string\"]\n}\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        1952,
+        -320
+      ],
+      "id": "fde5becd-cb5d-482e-ba6a-06d7f2ba1986",
+      "name": "Researcher + Outreach"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4o",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        1920,
+        100
+      ],
+      "id": "0e97b2b7-486c-4e04-a488-99275fbf26ed",
+      "name": "OpenRouter Chat Model1",
+      "credentials": {
+        "openRouterApi": {
+          "id": "GPPfaSmkXsB1i3Xw",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
+      "typeVersion": 1,
+      "position": [
+        2220,
+        -97.5
+      ],
+      "id": "a44c6a5f-79aa-4e0e-9de7-616de229970f",
+      "name": "Auto-fixing Output Parser1"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"hook\": \"Curious if OrionFlow’s shift to low-code tools has made internal dev requests easier to manage yet?\",\n  \"why_it_works\": \"Mentions the company’s niche and hints at an internal workflow challenge the lead likely owns.\",\n  \"company_summary\": \"OrionFlow appears to offer low-code automation tools for mid-sized SaaS companies. Their focus is on enabling non-technical teams to automate internal tasks and workflows.\",\n  \"persona_type\": \"head of operations\",\n  \"pain_points\": [\"bottlenecked internal dev resources\", \"slow manual workflows\"],\n  \"opportunities\": [\"faster internal automation\", \"empowering non-devs with self-serve tools\"]\n}\n\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        2328,
+        100
+      ],
+      "id": "61e35886-1b20-4678-95f4-59394b8059a7",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+      "typeVersion": 1,
+      "position": [
+        1980,
+        -100
+      ],
+      "id": "080cc3e5-4d8b-42c9-86c9-3a718c285fc6",
+      "name": "SerpAPI",
+      "credentials": {
+        "serpApi": {
+          "id": "67OONELAAqgnYuc6",
+          "name": "SerpAPI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Use the HTTP tool to fetch the /about page from the company’s domain when you need more detail.\n",
+        "url": "=https://{{domain}}/about\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        2100,
+        -100
+      ],
+      "id": "58852e15-523e-4072-9d6d-e3cfbd4f9acc",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "model": "anthropic/claude-3.5-sonnet",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        2816,
+        -100
+      ],
+      "id": "7a2b9332-caff-4bc5-a366-63653df60b6f",
+      "name": "Claude writer",
+      "credentials": {
+        "openRouterApi": {
+          "id": "GPPfaSmkXsB1i3Xw",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
+      "typeVersion": 1,
+      "position": [
+        2936,
+        -97.5
+      ],
+      "id": "cce271d2-a254-4862-bb29-527e718f86f5",
+      "name": "Auto-fixing Output Parser2"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"subject\": \"Supplier ops at Vendably\",\n  \"email_body\": \"Hi Alex, saw you're leading ops at Vendably—curious how your team is managing supplier shifts as you scale. We help ops leads automate vendor scoring and flag churn risks early.\\n\\nOpen to a short demo on how it works in similar setups?\"\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        3024,
+        100
+      ],
+      "id": "76b551ef-3093-4bba-a3a5-18912b332362",
+      "name": "Structured Output Parser2"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1LMsum2k-9Oz_y_OHYHN7UOQr272nLh8LMEOaAU87-k4",
+          "mode": "list",
+          "cachedResultName": "Lead Capture form  (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LMsum2k-9Oz_y_OHYHN7UOQr272nLh8LMEOaAU87-k4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1047658233,
+          "mode": "list",
+          "cachedResultName": "Enriched Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LMsum2k-9Oz_y_OHYHN7UOQr272nLh8LMEOaAU87-k4/edit#gid=1047658233"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Lead_ID": "={{ $('Updated Lead Score sheet').item.json.Lead_ID }}",
+            "AI_Hook": "={{ $('Researcher + Outreach').item.json.output.hook }}",
+            "AI_Hook_Reason": "={{ $('Researcher + Outreach').item.json.output.why_it_works }}",
+            "Company_Summary": "={{ $('Researcher + Outreach').item.json.output.company_summary }}",
+            "Persona_Type": "={{ $('Researcher + Outreach').item.json.output.persona_type }}",
+            "Pain_Points": "={{ $('Researcher + Outreach').item.json.output.pain_points[0] }} && {{ $('Researcher + Outreach').item.json.output.pain_points[1] }}",
+            "Opportunities": "={{ $('Researcher + Outreach').item.json.output.opportunities[0] }} && {{ $('Researcher + Outreach').item.json.output.opportunities[1] }}"
+          },
+          "matchingColumns": [
+            "Lead_ID"
+          ],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Job Title",
+              "displayName": "Job Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Industry",
+              "displayName": "Industry",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Company Size",
+              "displayName": "Company Size",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Preferred Contact time",
+              "displayName": "Preferred Contact time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "What kind of service are you looking for?",
+              "displayName": "What kind of service are you looking for?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Decision Maker (Are you the final authority to approve this service?)",
+              "displayName": "Decision Maker (Are you the final authority to approve this service?)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Notes.",
+              "displayName": "Notes.",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Lead_ID",
+              "displayName": "Lead_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "AI_Industry",
+              "displayName": "AI_Industry",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "AI_Lead_Score",
+              "displayName": "AI_Lead_Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "AI_Insight",
+              "displayName": "AI_Insight",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "AI_Outreach_Line",
+              "displayName": "AI_Outreach_Line",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Qualified",
+              "displayName": "Qualified",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "AI_Hook",
+              "displayName": "AI_Hook",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "AI_Hook_Reason",
+              "displayName": "AI_Hook_Reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company_Summary",
+              "displayName": "Company_Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Persona_Type",
+              "displayName": "Persona_Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Pain_Points",
+              "displayName": "Pain_Points",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Opportunities",
+              "displayName": "Opportunities",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        2596,
+        -320
+      ],
+      "id": "5e101351-d1c5-4d76-971c-d397f09c2000",
+      "name": "researched and updated sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pqXLK2lF5BcxwFdl",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1LMsum2k-9Oz_y_OHYHN7UOQr272nLh8LMEOaAU87-k4",
+          "mode": "list",
+          "cachedResultName": "Lead Capture form  (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LMsum2k-9Oz_y_OHYHN7UOQr272nLh8LMEOaAU87-k4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1047658233,
+          "mode": "list",
+          "cachedResultName": "Enriched Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LMsum2k-9Oz_y_OHYHN7UOQr272nLh8LMEOaAU87-k4/edit#gid=1047658233"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Lead_ID": "={{ $('Enriched Leads Sheet update1').item.json.Lead_ID }}",
+            "AI_Insight": "={{ $('Lead Segregator and scorer').item.json.output.Insight }}",
+            "AI_Lead_Score": "={{ $('Lead Segregator and scorer').item.json.output['Lead Score'] }}",
+            "AI_Industry": "={{ $('Lead Segregator and scorer').item.json.output.Industry }}",
+            "Qualified": "={{ $('Lead Segregator and scorer').item.json.output.qualified }}"
+          },
+          "matchingColumns": [
+            "Lead_ID"
+          ],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Job Title",
+              "displayName": "Job Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Industry",
+              "displayName": "Industry",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Company Size",
+              "displayName": "Company Size",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Preferred Contact time",
+              "displayName": "Preferred Contact time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "What kind of service are you looking for?",
+              "displayName": "What kind of service are you looking for?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Decision Maker (Are you the final authority to approve this service?)",
+              "displayName": "Decision Maker (Are you the final authority to approve this service?)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Notes.",
+              "displayName": "Notes.",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Lead_ID",
+              "displayName": "Lead_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "AI_Industry",
+              "displayName": "AI_Industry",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "AI_Lead_Score",
+              "displayName": "AI_Lead_Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "AI_Insight",
+              "displayName": "AI_Insight",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "AI_Outreach_Line",
+              "displayName": "AI_Outreach_Line",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Qualified",
+              "displayName": "Qualified",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1700,
+        -320
+      ],
+      "id": "5d733745-76fc-4926-bc17-859d8f1c51dd",
+      "name": "Updated Lead Score sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pqXLK2lF5BcxwFdl",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Name: {{ $('Enriched Leads Sheet update1').item.json['Full Name'] }}\nTitle: {{ $('Enriched Leads Sheet update1').item.json['Job Title'] }}\nCompany: {{ $('Enriched Leads Sheet update1').item.json['Company Name'] }}\n\nHook: {{ $('researched and updated sheet').item.json.AI_Hook }}\nWhy It Works: {{$('researched and updated sheet').item.json[\"AI_Hook_Reason\"]}}\n\nPain Points: {{$('researched and updated sheet').item.json[\"Pain_Points\"]}}\nOpportunities: {{$('researched and updated sheet').item.json[\"Opportunities\"]}}\n\nPersona Type: {{$('researched and updated sheet').item.json[\"Persona_Type\"]}}\nAI Insight: {{$('Updated Lead Score sheet').item.json[\"AI_Insight\"]}}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "Overall Objective\nGenerate short, context-aware cold outreach emails that are not only relevant and concise, but also thought-provoking and attention-grabbing—sparking genuine interest and reply readiness.\n\nContext\nYou are a B2B email personalization assistant trained to write short, insight-rich cold outreach emails that feel custom-made. Your writing should quickly show that you “get” the lead’s world and offer a compelling reason to talk, even when you're introducing a solution for the first time.\n\nTask\n\nUsing the provided lead data — typically including:\n\nRole\nCompany name\nAI-generated hook\nStrategic insight or differentiator\nPain points\nCraft a personalized cold email that follows this structure:\n\nSubject Line\nMake it catchy but clear—avoid clickbait\nWhere possible, use action verbs, pain points, or job-function context\nAim to spark curiosity or urgency based on the lead's role and company\nEmail Body\nWrite a message with:\n1–2 short paragraphs, under 120 words total\nA personalized opening line that references something relevant (e.g., role, company momentum, a challenge)\nA thought-provoking or question-driven bridge that frames a likely issue or friction point\nA value statement that includes a quantified or specific benefit (e.g., “cut admin by 60%”)\nA soft, clear CTA (e.g., “Would a quick chat make sense?”)\nUse Tools for Enrichment (If Needed)\nIf the input data is vague or too generic:\nUse the Web Search tool (Serper.dev) to clarify the company’s positioning\nUse the HTTP tool to fetch from:\nhttps://{{domain}}/about\nhttps://{{domain}}/solutions\nOnly use tools when they meaningfully improve accuracy or relevance\nConstraints\n\nReturn only valid JSON using the format below\nDo not exceed 120 words in the email_body\nTone must be professional yet conversational—never robotic\nMake the message feel like it came from a thoughtful human\nHooks and phrases should be catchy, insightful, or ask a smart question to provoke interest\nAvoid fluff, jargon, or overused templates\n\nOutput (Json)\n\n{\n  \"subject\": \"string\",\n  \"email_body\": \"string\"\n}\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        2832,
+        -320
+      ],
+      "id": "3a5bdb9c-27fa-4e3a-804c-28eb660e63a8",
+      "name": "AI Email Complier"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Code').item.json['Email Address'] }}",
+        "subject": "={{ $('Mail Content Updated Sheet').item.json.Subject }}",
+        "message": "={{ $('Mail Content Updated Sheet').item.json.Body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        3532,
+        -320
+      ],
+      "id": "a5817eb1-dc7f-4d7a-87bf-540905506745",
+      "name": "Gmail",
+      "webhookId": "364f46cb-656f-4dc0-bd19-ee8813730868",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "l6KrrUcVw4dMT8ah",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1LMsum2k-9Oz_y_OHYHN7UOQr272nLh8LMEOaAU87-k4",
+          "mode": "list",
+          "cachedResultName": "Lead Capture form  (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LMsum2k-9Oz_y_OHYHN7UOQr272nLh8LMEOaAU87-k4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1047658233,
+          "mode": "list",
+          "cachedResultName": "Enriched Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LMsum2k-9Oz_y_OHYHN7UOQr272nLh8LMEOaAU87-k4/edit#gid=1047658233"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Lead_ID": "={{ $('Updated Lead Score sheet').item.json.Lead_ID }}",
+            "Subject": "={{ $('AI Email Complier').item.json.output.subject }}",
+            "Body": "={{ $('AI Email Complier').item.json.output.email_body }}"
+          },
+          "matchingColumns": [
+            "Lead_ID"
+          ],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Job Title",
+              "displayName": "Job Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Industry",
+              "displayName": "Industry",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Company Size",
+              "displayName": "Company Size",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Preferred Contact time",
+              "displayName": "Preferred Contact time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "What kind of service are you looking for?",
+              "displayName": "What kind of service are you looking for?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Decision Maker (Are you the final authority to approve this service?)",
+              "displayName": "Decision Maker (Are you the final authority to approve this service?)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Notes.",
+              "displayName": "Notes.",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Lead_ID",
+              "displayName": "Lead_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "AI_Industry",
+              "displayName": "AI_Industry",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "AI_Lead_Score",
+              "displayName": "AI_Lead_Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "AI_Insight",
+              "displayName": "AI_Insight",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Qualified",
+              "displayName": "Qualified",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "AI_Hook",
+              "displayName": "AI_Hook",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "AI_Hook_Reason",
+              "displayName": "AI_Hook_Reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Company_Summary",
+              "displayName": "Company_Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Persona_Type",
+              "displayName": "Persona_Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Pain_Points",
+              "displayName": "Pain_Points",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Opportunities",
+              "displayName": "Opportunities",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Subject",
+              "displayName": "Subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Body",
+              "displayName": "Body",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        3312,
+        -320
+      ],
+      "id": "50ea44b9-4519-494c-af6d-386dff7a60ce",
+      "name": "Mail Content Updated Sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pqXLK2lF5BcxwFdl",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets Row Update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets Row Update": {
+      "main": [
+        [
+          {
+            "node": "Enriched Leads Sheet update1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enriched Leads Sheet update1": {
+      "main": [
+        [
+          {
+            "node": "Lead Segregator and scorer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Lead Segregator and scorer",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Auto-fixing Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auto-fixing Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Lead Segregator and scorer",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Auto-fixing Output Parser",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lead Segregator and scorer": {
+      "main": [
+        [
+          {
+            "node": "Updated Lead Score sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Researcher + Outreach",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Auto-fixing Output Parser1",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Auto-fixing Output Parser2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auto-fixing Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Researcher + Outreach",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Auto-fixing Output Parser1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SerpAPI": {
+      "ai_tool": [
+        [
+          {
+            "node": "Researcher + Outreach",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "AI Email Complier",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "ai_tool": [
+        [
+          {
+            "node": "Researcher + Outreach",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "AI Email Complier",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Researcher + Outreach": {
+      "main": [
+        [
+          {
+            "node": "researched and updated sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude writer": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Email Complier",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auto-fixing Output Parser2": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Email Complier",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser2": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Auto-fixing Output Parser2",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "researched and updated sheet": {
+      "main": [
+        [
+          {
+            "node": "AI Email Complier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Updated Lead Score sheet": {
+      "main": [
+        [
+          {
+            "node": "Researcher + Outreach",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Email Complier": {
+      "main": [
+        [
+          {
+            "node": "Mail Content Updated Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mail Content Updated Sheet": {
+      "main": [
+        [
+          {
+            "node": "Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "c9de2330-f6bb-47dd-a298-fb2284f2f033",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7776e93816886a21b2f4d68c233d94c51d467aa16548d19a210cb644d8b91796"
+  },
+  "id": "Wwdc313QHcDZa5xg",
+  "tags": [
+    {
+      "createdAt": "2025-04-23T11:24:08.096Z",
+      "updatedAt": "2025-04-23T11:24:08.096Z",
+      "id": "0fcqOg06RpbhHFXX",
+      "name": "Ai1"
+    }
+  ]
+}
