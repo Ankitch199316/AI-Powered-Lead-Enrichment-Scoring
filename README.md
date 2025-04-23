@@ -70,3 +70,21 @@ Each agent uses:
   "email_body": "Ankit, I noticed EcoSolar.vaha's growing momentum in the solar space, and I wondered if you're facing the common challenge of managing increasing customer    inquiries while maintaining quick response times?
    We've helped solar companies reduce their customer response time by 73% through intelligent workflow automation, while simultaneously increasing qualified leads by 45%.    Would you be open to a brief chat about how we could streamline your CRM integration and automate customer service processes to accelerate EcoSolar.vaha's growth?"
 }
+```
+
+## 🔮 What More Can Be Done
+
+Here’s what this system can evolve into — and how it can support real sales teams at scale:
+
+### 🚀 Enhancement Ideas:
+- Swap Google Sheets for Airtable/HubSpot/Notion CRM
+- Add phone number/email enrichment via APIs like:
+  *Clearbit
+  *Apollo
+  *PeopleDataLabs
+  *Clay.com (proxy to multiple enrichment stacks)
+- Add Intent-based Lead Scoring using G2/LinkedIn Signals
+- Track email opens, clicks, and replies to trigger follow-ups
+- Plug into Slack or Notion for lead alerts or summaries
+- Build a lead dashboard in Supabase or Metabase
+- Add Zapier triggers to push deals into your pipeline
