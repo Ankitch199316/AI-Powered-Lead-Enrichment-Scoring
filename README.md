@@ -6,7 +6,7 @@
 
 ## 🧭 Why I Built This
 
-With 6 years of experience across **sales, business development, and revenue leadership roles** — including 3+ years in **team leadership and strategy**, I’ve spent thousands of hours watching talented teams get buried under:
+With 6 years of experience across **sales, business development, and revenue leadership roles** — including 3+ years in **Sales leadership and strategy**, I’ve spent thousands of hours watching talented teams get buried under:
 
 - repetitive qualification calls
 - scattered CRM notes
